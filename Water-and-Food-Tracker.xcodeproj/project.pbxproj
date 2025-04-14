@@ -10,9 +10,22 @@
 		44EACCE82DAD262200E95863 /* Water-and-Food-Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Water-and-Food-Tracker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		44BF13B12DAD67F9006B6F59 /* Exceptions for "Water-and-Food-Tracker" folder in "Water-and-Food-Tracker" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 44EACCE72DAD262200E95863 /* Water-and-Food-Tracker */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		44EACCEA2DAD262200E95863 /* Water-and-Food-Tracker */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				44BF13B12DAD67F9006B6F59 /* Exceptions for "Water-and-Food-Tracker" folder in "Water-and-Food-Tracker" target */,
+			);
 			path = "Water-and-Food-Tracker";
 			sourceTree = "<group>";
 		};
