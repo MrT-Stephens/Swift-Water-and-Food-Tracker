@@ -12,12 +12,17 @@ import SwiftData
 struct Water_and_Food_TrackerApp: App {
     @StateObject private var dataManager = DataManager()
     @StateObject private var healthKitManager = HealthKitManager()
+    @StateObject private var notificationManager = NotificationManager.shared
     
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environmentObject(dataManager)
                 .environmentObject(healthKitManager)
+                .environmentObject(notificationManager)
+                .onAppear {
+                    notificationManager.requestAuthorization()
+                }
         }
     }
 }

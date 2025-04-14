@@ -1,8 +1,8 @@
 import SwiftUI
-import UIKit
 
 struct SettingsView: View {
     @EnvironmentObject var dataManager: DataManager
+    @EnvironmentObject var notificationManager: NotificationManager
     @State private var waterTarget = ""
     @State private var calorieTarget = ""
     @State private var stepTarget = ""
@@ -57,9 +57,23 @@ struct SettingsView: View {
                 }
                 
                 Section(header: Text("Notifications")) {
-                    Toggle("Daily Reminders", isOn: .constant(true))
-                    Toggle("Progress Updates", isOn: .constant(true))
-                    Toggle("Target Alerts", isOn: .constant(true))
+                    if !notificationManager.isAuthorized {
+                        Button("Enable Notifications") {
+                            notificationManager.requestAuthorization()
+                        }
+                    } else {
+                        Toggle("Water Reminders", isOn: $notificationManager.isWaterReminderEnabled)
+                        
+                        if notificationManager.isWaterReminderEnabled {
+                            DatePicker("Water Reminder Time", selection: $notificationManager.waterReminderTime, displayedComponents: .hourAndMinute)
+                        }
+                        
+                        Toggle("Food Reminders", isOn: $notificationManager.isFoodReminderEnabled)
+                        
+                        if notificationManager.isFoodReminderEnabled {
+                            DatePicker("Food Reminder Time", selection: $notificationManager.foodReminderTime, displayedComponents: .hourAndMinute)
+                        }
+                    }
                 }
                 
                 Section(header: Text("Debug")) {
@@ -134,5 +148,6 @@ struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
         SettingsView()
             .environmentObject(DataManager())
+            .environmentObject(NotificationManager.shared)
     }
 } 
