@@ -8,50 +8,116 @@
 import WidgetKit
 import SwiftUI
 
-struct Provider: AppIntentTimelineProvider {
-    func placeholder(in context: Context) -> SimpleEntry {
-        SimpleEntry(date: Date(), configuration: ConfigurationAppIntent())
+struct Provider: TimelineProvider {
+    func placeholder(in context: Context) -> WaterFoodEntry {
+        WaterFoodEntry(date: Date(), waterIntake: 500, foodIntake: 1200)
     }
 
-    func snapshot(for configuration: ConfigurationAppIntent, in context: Context) async -> SimpleEntry {
-        SimpleEntry(date: Date(), configuration: configuration)
-    }
-    
-    func timeline(for configuration: ConfigurationAppIntent, in context: Context) async -> Timeline<SimpleEntry> {
-        var entries: [SimpleEntry] = []
-
-        // Generate a timeline consisting of five entries an hour apart, starting from the current date.
-        let currentDate = Date()
-        for hourOffset in 0 ..< 5 {
-            let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
-            let entry = SimpleEntry(date: entryDate, configuration: configuration)
-            entries.append(entry)
-        }
-
-        return Timeline(entries: entries, policy: .atEnd)
+    func getSnapshot(in context: Context, completion: @escaping (WaterFoodEntry) -> ()) {
+        let waterIntake = SharedDataManager.shared.getTodayWaterIntake()
+        let foodIntake = SharedDataManager.shared.getTodayFoodIntake()
+        let entry = WaterFoodEntry(date: Date(), waterIntake: waterIntake, foodIntake: foodIntake)
+        completion(entry)
     }
 
-//    func relevances() async -> WidgetRelevances<ConfigurationAppIntent> {
-//        // Generate a list containing the contexts this widget is relevant in.
-//    }
+    func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
+        let waterIntake = SharedDataManager.shared.getTodayWaterIntake()
+        let foodIntake = SharedDataManager.shared.getTodayFoodIntake()
+        
+        let entry = WaterFoodEntry(date: Date(), waterIntake: waterIntake, foodIntake: foodIntake)
+        
+        // Update every 30 minutes
+        let nextUpdate = Calendar.current.date(byAdding: .minute, value: 30, to: Date())!
+        let timeline = Timeline(entries: [entry], policy: .after(nextUpdate))
+        
+        completion(timeline)
+    }
 }
 
-struct SimpleEntry: TimelineEntry {
+struct WaterFoodEntry: TimelineEntry {
     let date: Date
-    let configuration: ConfigurationAppIntent
+    let waterIntake: Double
+    let foodIntake: Double
 }
 
 struct Water_WidgetEntryView : View {
     var entry: Provider.Entry
+    @Environment(\.widgetFamily) var family
 
     var body: some View {
-        VStack {
-            Text("Time:")
-            Text(entry.date, style: .time)
-
-            Text("Favorite Emoji:")
-            Text(entry.configuration.favoriteEmoji)
+        switch family {
+        case .systemSmall:
+            smallWidgetView
+        case .systemMedium:
+            mediumWidgetView
+        default:
+            smallWidgetView
         }
+    }
+    
+    private var smallWidgetView: some View {
+        VStack(spacing: 8) {
+            Text("Today's Progress")
+                .font(.headline)
+                .lineLimit(1)
+            
+            HStack(spacing: 12) {
+                VStack {
+                    Image(systemName: "drop.fill")
+                        .foregroundColor(.blue)
+                        .font(.title2)
+                    Text("\(Int(entry.waterIntake))ml")
+                        .font(.caption)
+                        .bold()
+                }
+                
+                VStack {
+                    Image(systemName: "fork.knife")
+                        .foregroundColor(.green)
+                        .font(.title2)
+                    Text("\(Int(entry.foodIntake))kcal")
+                        .font(.caption)
+                        .bold()
+                }
+            }
+        }
+        .padding()
+    }
+    
+    private var mediumWidgetView: some View {
+        VStack(spacing: 12) {
+            Text("Today's Progress")
+                .font(.headline)
+                .lineLimit(1)
+            
+            HStack(spacing: 20) {
+                VStack(spacing: 8) {
+                    Image(systemName: "drop.fill")
+                        .foregroundColor(.blue)
+                        .font(.title)
+                    Text("Water")
+                        .font(.caption)
+                    Text("\(Int(entry.waterIntake))ml")
+                        .font(.title3)
+                        .bold()
+                }
+                
+                Divider()
+                
+                VStack(spacing: 8) {
+                    Image(systemName: "fork.knife")
+                        .foregroundColor(.green)
+                        .font(.title)
+                    Text("Food")
+                        .font(.caption)
+                    Text("\(Int(entry.foodIntake))kcal")
+                        .font(.title3)
+                        .bold()
+                }
+            }
+            .padding(.horizontal)
+        }
+        .padding()
     }
 }
 
@@ -59,30 +125,23 @@ struct Water_Widget: Widget {
     let kind: String = "Water_Widget"
 
     var body: some WidgetConfiguration {
-        AppIntentConfiguration(kind: kind, intent: ConfigurationAppIntent.self, provider: Provider()) { entry in
+        StaticConfiguration(kind: kind, provider: Provider()) { entry in
             Water_WidgetEntryView(entry: entry)
-                .containerBackground(.fill.tertiary, for: .widget)
         }
-    }
-}
-
-extension ConfigurationAppIntent {
-    fileprivate static var smiley: ConfigurationAppIntent {
-        let intent = ConfigurationAppIntent()
-        intent.favoriteEmoji = "😀"
-        return intent
-    }
-    
-    fileprivate static var starEyes: ConfigurationAppIntent {
-        let intent = ConfigurationAppIntent()
-        intent.favoriteEmoji = "🤩"
-        return intent
+        .configurationDisplayName("Water & Food Tracker")
+        .description("Track your daily water and food intake.")
+        .supportedFamilies([.systemSmall, .systemMedium])
     }
 }
 
 #Preview(as: .systemSmall) {
     Water_Widget()
 } timeline: {
-    SimpleEntry(date: .now, configuration: .smiley)
-    SimpleEntry(date: .now, configuration: .starEyes)
+    WaterFoodEntry(date: .now, waterIntake: 500, foodIntake: 1200)
+}
+
+#Preview(as: .systemMedium) {
+    Water_Widget()
+} timeline: {
+    WaterFoodEntry(date: .now, waterIntake: 500, foodIntake: 1200)
 }

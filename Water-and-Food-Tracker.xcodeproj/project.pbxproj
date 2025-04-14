@@ -6,7 +6,41 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		44BF13E52DAD6988006B6F59 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44BF13E42DAD6988006B6F59 /* WidgetKit.framework */; };
+		44BF13E72DAD6988006B6F59 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44BF13E62DAD6988006B6F59 /* SwiftUI.framework */; };
+		44BF13F92DAD698A006B6F59 /* Water-WidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 44BF13E22DAD6988006B6F59 /* Water-WidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		44BF13F62DAD698A006B6F59 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 44EACCE02DAD262200E95863 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 44BF13E12DAD6988006B6F59;
+			remoteInfo = "Water-WidgetExtension";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		44BF13F82DAD698A006B6F59 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				44BF13F92DAD698A006B6F59 /* Water-WidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		44BF13E22DAD6988006B6F59 /* Water-WidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Water-WidgetExtension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		44BF13E42DAD6988006B6F59 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		44BF13E62DAD6988006B6F59 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		44BF14002DAD6B36006B6F59 /* Water-WidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Water-WidgetExtension.entitlements"; sourceTree = "<group>"; };
 		44EACCE82DAD262200E95863 /* Water-and-Food-Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Water-and-Food-Tracker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -18,9 +52,24 @@
 			);
 			target = 44EACCE72DAD262200E95863 /* Water-and-Food-Tracker */;
 		};
+		44BF13FD2DAD698A006B6F59 /* Exceptions for "Water-Widget" folder in "Water-WidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 44BF13E12DAD6988006B6F59 /* Water-WidgetExtension */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		44BF13E82DAD6988006B6F59 /* Water-Widget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				44BF13FD2DAD698A006B6F59 /* Exceptions for "Water-Widget" folder in "Water-WidgetExtension" target */,
+			);
+			path = "Water-Widget";
+			sourceTree = "<group>";
+		};
 		44EACCEA2DAD262200E95863 /* Water-and-Food-Tracker */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -32,6 +81,15 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		44BF13DF2DAD6988006B6F59 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				44BF13E72DAD6988006B6F59 /* SwiftUI.framework in Frameworks */,
+				44BF13E52DAD6988006B6F59 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		44EACCE52DAD262200E95863 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -42,10 +100,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		44BF13E32DAD6988006B6F59 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				44BF13E42DAD6988006B6F59 /* WidgetKit.framework */,
+				44BF13E62DAD6988006B6F59 /* SwiftUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		44EACCDF2DAD262200E95863 = {
 			isa = PBXGroup;
 			children = (
+				44BF14002DAD6B36006B6F59 /* Water-WidgetExtension.entitlements */,
 				44EACCEA2DAD262200E95863 /* Water-and-Food-Tracker */,
+				44BF13E82DAD6988006B6F59 /* Water-Widget */,
+				44BF13E32DAD6988006B6F59 /* Frameworks */,
 				44EACCE92DAD262200E95863 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -54,6 +124,7 @@
 			isa = PBXGroup;
 			children = (
 				44EACCE82DAD262200E95863 /* Water-and-Food-Tracker.app */,
+				44BF13E22DAD6988006B6F59 /* Water-WidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -61,6 +132,28 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		44BF13E12DAD6988006B6F59 /* Water-WidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 44BF13FA2DAD698A006B6F59 /* Build configuration list for PBXNativeTarget "Water-WidgetExtension" */;
+			buildPhases = (
+				44BF13DE2DAD6988006B6F59 /* Sources */,
+				44BF13DF2DAD6988006B6F59 /* Frameworks */,
+				44BF13E02DAD6988006B6F59 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				44BF13E82DAD6988006B6F59 /* Water-Widget */,
+			);
+			name = "Water-WidgetExtension";
+			packageProductDependencies = (
+			);
+			productName = "Water-WidgetExtension";
+			productReference = 44BF13E22DAD6988006B6F59 /* Water-WidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		44EACCE72DAD262200E95863 /* Water-and-Food-Tracker */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 44EACCF82DAD262400E95863 /* Build configuration list for PBXNativeTarget "Water-and-Food-Tracker" */;
@@ -68,10 +161,12 @@
 				44EACCE42DAD262200E95863 /* Sources */,
 				44EACCE52DAD262200E95863 /* Frameworks */,
 				44EACCE62DAD262200E95863 /* Resources */,
+				44BF13F82DAD698A006B6F59 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				44BF13F72DAD698A006B6F59 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				44EACCEA2DAD262200E95863 /* Water-and-Food-Tracker */,
@@ -93,6 +188,9 @@
 				LastSwiftUpdateCheck = 1620;
 				LastUpgradeCheck = 1620;
 				TargetAttributes = {
+					44BF13E12DAD6988006B6F59 = {
+						CreatedOnToolsVersion = 16.2;
+					};
 					44EACCE72DAD262200E95863 = {
 						CreatedOnToolsVersion = 16.2;
 					};
@@ -113,11 +211,19 @@
 			projectRoot = "";
 			targets = (
 				44EACCE72DAD262200E95863 /* Water-and-Food-Tracker */,
+				44BF13E12DAD6988006B6F59 /* Water-WidgetExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		44BF13E02DAD6988006B6F59 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		44EACCE62DAD262200E95863 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -128,6 +234,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		44BF13DE2DAD6988006B6F59 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		44EACCE42DAD262200E95863 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -137,7 +250,71 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		44BF13F72DAD698A006B6F59 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 44BF13E12DAD6988006B6F59 /* Water-WidgetExtension */;
+			targetProxy = 44BF13F62DAD698A006B6F59 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		44BF13FB2DAD698A006B6F59 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = "Water-WidgetExtension.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Water-Widget/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Water-Widget";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.mrt-stephens.Water-and-Food-Tracker.Water-Widget";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		44BF13FC2DAD698A006B6F59 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = "Water-WidgetExtension.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Water-Widget/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Water-Widget";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.mrt-stephens.Water-and-Food-Tracker.Water-Widget";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		44EACCF62DAD262400E95863 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -266,6 +443,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Water-and-Food-Tracker/Preview Content\"";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Water-and-Food-Tracker/Info.plist";
@@ -296,6 +474,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Water-and-Food-Tracker/Preview Content\"";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Water-and-Food-Tracker/Info.plist";
@@ -320,6 +499,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		44BF13FA2DAD698A006B6F59 /* Build configuration list for PBXNativeTarget "Water-WidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				44BF13FB2DAD698A006B6F59 /* Debug */,
+				44BF13FC2DAD698A006B6F59 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		44EACCE32DAD262200E95863 /* Build configuration list for PBXProject "Water-and-Food-Tracker" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

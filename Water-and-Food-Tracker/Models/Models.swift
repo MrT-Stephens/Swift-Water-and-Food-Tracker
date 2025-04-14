@@ -80,7 +80,14 @@ class DataManager: ObservableObject {
     private let userTargetsKey = "userTargets"
     private let stepEntriesKey = "stepEntries"
     
+    // App Group identifier for widget data sharing
+    private let appGroupIdentifier = "group.com.thomasstephens.waterandfoodtracker"
+    private var sharedUserDefaults: UserDefaults?
+    
     init() {
+        // Initialize shared UserDefaults for widget access
+        sharedUserDefaults = UserDefaults(suiteName: appGroupIdentifier)
+        
         loadData()
         
         // Uncomment the line below to reset all data and initialize with default data
@@ -323,22 +330,10 @@ class DataManager: ObservableObject {
         return getDailyFoodEntries().reduce(0) { $0 + $1.calories }
     }
     
-    private func saveData() {
-        if let encoded = try? JSONEncoder().encode(foodEntries) {
-            UserDefaults.standard.set(encoded, forKey: foodEntriesKey)
-        }
-        if let encoded = try? JSONEncoder().encode(waterEntries) {
-            UserDefaults.standard.set(encoded, forKey: waterEntriesKey)
-        }
-        if let encoded = try? JSONEncoder().encode(userTargets) {
-            UserDefaults.standard.set(encoded, forKey: userTargetsKey)
-        }
-        if let encoded = try? JSONEncoder().encode(stepEntries) {
-            UserDefaults.standard.set(encoded, forKey: stepEntriesKey)
-        }
-    }
+    // MARK: - Data Persistence
     
     private func loadData() {
+        // Load from standard UserDefaults
         if let foodData = UserDefaults.standard.data(forKey: foodEntriesKey),
            let decodedFood = try? JSONDecoder().decode([FoodEntry].self, from: foodData) {
             foodEntries = decodedFood
@@ -357,6 +352,46 @@ class DataManager: ObservableObject {
         if let stepData = UserDefaults.standard.data(forKey: stepEntriesKey),
            let decodedSteps = try? JSONDecoder().decode([Date: Int].self, from: stepData) {
             stepEntries = decodedSteps
+        }
+        
+        // Also save to shared UserDefaults for widget access
+        saveDataToSharedDefaults()
+    }
+    
+    private func saveData() {
+        // Save to standard UserDefaults
+        if let encodedFood = try? JSONEncoder().encode(foodEntries) {
+            UserDefaults.standard.set(encodedFood, forKey: foodEntriesKey)
+        }
+        
+        if let encodedWater = try? JSONEncoder().encode(waterEntries) {
+            UserDefaults.standard.set(encodedWater, forKey: waterEntriesKey)
+        }
+        
+        if let encodedTargets = try? JSONEncoder().encode(userTargets) {
+            UserDefaults.standard.set(encodedTargets, forKey: userTargetsKey)
+        }
+        
+        if let encodedSteps = try? JSONEncoder().encode(stepEntries) {
+            UserDefaults.standard.set(encodedSteps, forKey: stepEntriesKey)
+        }
+        
+        // Also save to shared UserDefaults for widget access
+        saveDataToSharedDefaults()
+    }
+    
+    private func saveDataToSharedDefaults() {
+        // Save to shared UserDefaults for widget access
+        if let encodedFood = try? JSONEncoder().encode(foodEntries) {
+            sharedUserDefaults?.set(encodedFood, forKey: foodEntriesKey)
+        }
+        
+        if let encodedWater = try? JSONEncoder().encode(waterEntries) {
+            sharedUserDefaults?.set(encodedWater, forKey: waterEntriesKey)
+        }
+        
+        if let encodedTargets = try? JSONEncoder().encode(userTargets) {
+            sharedUserDefaults?.set(encodedTargets, forKey: userTargetsKey)
         }
     }
 } 
