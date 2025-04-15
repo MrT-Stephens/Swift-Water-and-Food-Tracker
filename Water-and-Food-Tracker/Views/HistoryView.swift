@@ -1,13 +1,18 @@
 import SwiftUI
 import Charts
+import SwiftData
 
 struct HistoryView: View {
-    @EnvironmentObject var dataManager: DataManager
+    @Environment(\.modelContext) private var modelContext
     @EnvironmentObject var healthKitManager: HealthKitManager
     @State private var selectedTimeRange: TimeRange = .week
     @State private var stepData: [DailyData] = []
     @State private var isLoadingSteps = false
     @State private var stepError: String?
+    
+    @Query private var foodEntries: [FoodEntry]
+    @Query private var waterEntries: [WaterEntry]
+    @Query private var stepEntries: [StepEntry]
     
     enum TimeRange: String, CaseIterable {
         case week = "Week"
@@ -180,7 +185,7 @@ struct HistoryView: View {
         let startDate = calendar.date(byAdding: .day, value: -selectedTimeRange.days, to: endDate)!
         
         // Get actual data
-        let actualData = dataManager.waterEntries
+        let actualData = waterEntries
             .filter { $0.timestamp >= startDate && $0.timestamp <= endDate }
             .reduce(into: [Date: Double]()) { result, entry in
                 let date = calendar.startOfDay(for: entry.timestamp)
@@ -208,7 +213,7 @@ struct HistoryView: View {
         let startDate = calendar.date(byAdding: .day, value: -selectedTimeRange.days, to: endDate)!
         
         // Get actual data
-        let actualData = dataManager.foodEntries
+        let actualData = foodEntries
             .filter { $0.timestamp >= startDate && $0.timestamp <= endDate }
             .reduce(into: [Date: Int]()) { result, entry in
                 let date = calendar.startOfDay(for: entry.timestamp)
@@ -253,41 +258,39 @@ struct HistoryView: View {
             var currentDate = startDate
             while currentDate <= endDate {
                 let date = calendar.startOfDay(for: currentDate)
-                // Get the step count for this date, defaulting to 0 if not found
-                let steps = stepCounts[date] ?? 0
-                completeData[date] = steps
+                completeData[date] = stepCounts[date] ?? 0
                 currentDate = calendar.date(byAdding: .day, value: 1, to: currentDate)!
             }
             
-            await MainActor.run {
-                // Convert to DailyData array and sort by date
-                stepData = completeData.map { DailyData(date: $0.key, steps: $0.value) }
-                    .sorted { $0.date < $1.date }
-                isLoadingSteps = false
+            stepData = completeData.map { DailyData(date: $0.key, steps: $0.value) }
+                .sorted { $0.date < $1.date }
+            
+            // Update step entries in SwiftData
+            for (date, count) in stepCounts {
+                let startOfDay = calendar.startOfDay(for: date)
+                let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
+                
+                let descriptor = FetchDescriptor<StepEntry>(
+                    predicate: #Predicate<StepEntry> { entry in
+                        entry.date >= startOfDay && entry.date < endOfDay
+                    }
+                )
+                
+                if let existingEntry = try? modelContext.fetch(descriptor).first {
+                    existingEntry.count = count
+                } else {
+                    let newEntry = StepEntry(date: date, count: count)
+                    modelContext.insert(newEntry)
+                }
             }
+            
+            try? modelContext.save()
+            
         } catch {
-            await MainActor.run {
-                stepError = "Failed to fetch step data: \(error.localizedDescription)"
-                isLoadingSteps = false
-            }
+            stepError = "Failed to fetch steps: \(error.localizedDescription)"
         }
-    }
-}
-
-struct DailyData: Identifiable {
-    let id = UUID()
-    let date: Date
-    var amount: Double = 0
-    var calories: Int = 0
-    var steps: Int = 0
-    
-    init(date: Date, amount: Double = 0, calories: Int = 0, steps: Int = 0) {
-        // Normalize the date to start of day for consistency
-        let calendar = Calendar.current
-        self.date = calendar.startOfDay(for: date)
-        self.amount = amount
-        self.calories = calories
-        self.steps = steps
+        
+        isLoadingSteps = false
     }
 }
 
@@ -304,20 +307,27 @@ struct ChartCard<Content: View>: View {
         VStack(alignment: .leading) {
             Text(title)
                 .font(.headline)
-                .padding(.bottom, 5)
+                .padding(.horizontal)
             
             content
+                .padding()
+                .background(Color(.systemBackground))
+                .cornerRadius(10)
+                .shadow(radius: 2)
         }
-        .padding()
-        .background(Color(uiColor: .systemBackground))
-        .cornerRadius(15)
-        .shadow(radius: 2)
     }
+}
+
+struct DailyData {
+    let date: Date
+    var amount: Double = 0
+    var calories: Int = 0
+    var steps: Int = 0
 }
 
 struct HistoryView_Previews: PreviewProvider {
     static var previews: some View {
         HistoryView()
-            .environmentObject(DataManager())
+            .environmentObject(HealthKitManager())
     }
 } 

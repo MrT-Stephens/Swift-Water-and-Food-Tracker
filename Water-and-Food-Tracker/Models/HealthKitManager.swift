@@ -125,7 +125,7 @@ class HealthKitManager: ObservableObject {
     }
     
     // Function to generate simulated step data for testing
-    private func generateSimulatedStepData(from startDate: Date, to endDate: Date) -> [Date: Int] {
+    public func generateSimulatedStepData(from startDate: Date, to endDate: Date) -> [Date: Int] {
         var results: [Date: Int] = [:]
         let calendar = Calendar.current
         

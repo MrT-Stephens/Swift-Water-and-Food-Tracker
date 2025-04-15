@@ -1,12 +1,21 @@
 import SwiftUI
+import SwiftData
 
 struct FoodTrackingView: View {
-    @EnvironmentObject var dataManager: DataManager
+    @Environment(\.modelContext) private var modelContext
     @State private var showingAddFood = false
     @State private var selectedCategory = "Breakfast"
     @State private var foodName = ""
     @State private var calories = ""
     @State private var notes = ""
+    
+    @Query private var foodEntries: [FoodEntry]
+    
+    private var dailyFoodEntries: [FoodEntry] {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        return foodEntries.filter { calendar.isDate($0.timestamp, inSameDayAs: today) }
+    }
     
     let categories = ["Breakfast", "Lunch", "Dinner", "Snack"]
     
@@ -14,7 +23,7 @@ struct FoodTrackingView: View {
         NavigationView {
             List {
                 Section(header: Text("Today's Food Entries")) {
-                    ForEach(dataManager.getDailyFoodEntries()) { entry in
+                    ForEach(dailyFoodEntries) { entry in
                         VStack(alignment: .leading) {
                             Text(entry.name)
                                 .font(.headline)
@@ -84,7 +93,8 @@ struct FoodTrackingView: View {
             notes: notes.isEmpty ? nil : notes
         )
         
-        dataManager.addFoodEntry(entry)
+        modelContext.insert(entry)
+        try? modelContext.save()
         
         // Reset form
         foodName = ""
@@ -97,6 +107,5 @@ struct FoodTrackingView: View {
 struct FoodTrackingView_Previews: PreviewProvider {
     static var previews: some View {
         FoodTrackingView()
-            .environmentObject(DataManager())
     }
 } 

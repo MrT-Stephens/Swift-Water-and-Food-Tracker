@@ -1,9 +1,27 @@
 import SwiftUI
+import SwiftData
 
 struct WaterTrackingView: View {
-    @EnvironmentObject var dataManager: DataManager
+    @Environment(\.modelContext) private var modelContext
     @State private var showingAddWater = false
     @State private var amount = ""
+    
+    @Query private var waterEntries: [WaterEntry]
+    @Query private var userTargets: [UserTargets]
+    
+    private var currentTargets: UserTargets {
+        userTargets.first ?? UserTargets()
+    }
+    
+    private var dailyWaterEntries: [WaterEntry] {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        return waterEntries.filter { calendar.isDate($0.timestamp, inSameDayAs: today) }
+    }
+    
+    private var totalWaterConsumption: Double {
+        dailyWaterEntries.reduce(0) { $0 + $1.amount }
+    }
     
     let commonAmounts = [100, 200, 300, 500]
     
@@ -18,16 +36,16 @@ struct WaterTrackingView: View {
                         .foregroundColor(.blue)
                     
                     Circle()
-                        .trim(from: 0.0, to: CGFloat(min(dataManager.getTotalWaterConsumption() / dataManager.userTargets.dailyWaterTarget, 1.0)))
+                        .trim(from: 0.0, to: CGFloat(min(totalWaterConsumption / currentTargets.dailyWaterTarget, 1.0)))
                         .stroke(style: StrokeStyle(lineWidth: 20, lineCap: .round, lineJoin: .round))
                         .foregroundColor(.blue)
                         .rotationEffect(Angle(degrees: 270.0))
                     
                     VStack {
-                        Text("\(Int(dataManager.getTotalWaterConsumption()))ml")
+                        Text("\(Int(totalWaterConsumption))ml")
                             .font(.title)
                             .bold()
-                        Text("of \(Int(dataManager.userTargets.dailyWaterTarget))ml")
+                        Text("of \(Int(currentTargets.dailyWaterTarget))ml")
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                     }
@@ -62,7 +80,7 @@ struct WaterTrackingView: View {
                 // Today's Entries
                 List {
                     Section(header: Text("Today's Water Intake")) {
-                        ForEach(dataManager.getDailyWaterEntries()) { entry in
+                        ForEach(dailyWaterEntries) { entry in
                             HStack {
                                 Text("\(Int(entry.amount))ml")
                                 Spacer()
@@ -108,7 +126,8 @@ struct WaterTrackingView: View {
     
     private func addWaterEntry(amount: Double) {
         let entry = WaterEntry(amount: amount)
-        dataManager.addWaterEntry(entry)
+        modelContext.insert(entry)
+        try? modelContext.save()
         self.amount = ""
         showingAddWater = false
     }
@@ -117,6 +136,5 @@ struct WaterTrackingView: View {
 struct WaterTrackingView_Previews: PreviewProvider {
     static var previews: some View {
         WaterTrackingView()
-            .environmentObject(DataManager())
     }
 } 

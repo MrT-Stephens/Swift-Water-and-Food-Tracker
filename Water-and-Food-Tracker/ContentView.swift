@@ -7,13 +7,12 @@
 
 import SwiftUI
 import HealthKit
+import SwiftData
 
 struct ContentView: View {
-    @StateObject private var dataManager = DataManager()
+    @Environment(\.modelContext) private var modelContext
     @StateObject private var healthKitManager = HealthKitManager.shared
     @State private var selectedTab = 0
-    @State private var showingTestingView = false
-    @AppStorage("debugModeEnabled") private var debugModeEnabled = false
     
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -47,26 +46,7 @@ struct ContentView: View {
                 }
                 .tag(4)
         }
-        .environmentObject(dataManager)
         .environmentObject(healthKitManager)
-        .overlay(alignment: .topTrailing) {
-            if debugModeEnabled {
-                Button(action: {
-                    showingTestingView = true
-                }) {
-                    Image(systemName: "hammer.fill")
-                        .padding(8)
-                        .background(Color.gray.opacity(0.2))
-                        .clipShape(Circle())
-                }
-                .padding()
-            }
-        }
-        .sheet(isPresented: $showingTestingView) {
-            TestingView()
-                .environmentObject(dataManager)
-                .environmentObject(healthKitManager)
-        }
     }
 }
 

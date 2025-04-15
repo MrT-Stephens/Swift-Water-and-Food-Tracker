@@ -1,7 +1,8 @@
 import SwiftUI
+import SwiftData
 
 struct SettingsView: View {
-    @EnvironmentObject var dataManager: DataManager
+    @Environment(\.modelContext) private var modelContext
     @EnvironmentObject var notificationManager: NotificationManager
     @State private var waterTarget = ""
     @State private var calorieTarget = ""
@@ -10,6 +11,12 @@ struct SettingsView: View {
     @State private var targetWarnings: [String] = []
     @State private var showingResetConfirmation = false
     @AppStorage("debugModeEnabled") private var debugModeEnabled = false
+    
+    @Query private var userTargets: [UserTargets]
+    
+    private var currentTargets: UserTargets {
+        userTargets.first ?? UserTargets()
+    }
     
     var body: some View {
         NavigationView {
@@ -81,7 +88,7 @@ struct SettingsView: View {
                     
                     if debugModeEnabled {
                         Button("Generate Test Data") {
-                            dataManager.resetAndInitializeWithDefaultData(extensive: true)
+                            generateTestData()
                         }
                         .foregroundColor(.blue)
                     }
@@ -105,7 +112,7 @@ struct SettingsView: View {
             .alert("Reset All Data", isPresented: $showingResetConfirmation) {
                 Button("Cancel", role: .cancel) { }
                 Button("Reset", role: .destructive) {
-                    dataManager.resetAllData()
+                    resetAllData()
                 }
             } message: {
                 Text("This will permanently delete all your water entries, food entries, and step data. This action cannot be undone.")
@@ -117,13 +124,13 @@ struct SettingsView: View {
     }
     
     private func loadCurrentTargets() {
-        waterTarget = String(Int(dataManager.userTargets.dailyWaterTarget))
-        calorieTarget = String(dataManager.userTargets.dailyCalorieTarget)
-        stepTarget = String(dataManager.userTargets.dailyStepTarget)
+        waterTarget = String(Int(currentTargets.dailyWaterTarget))
+        calorieTarget = String(currentTargets.dailyCalorieTarget)
+        stepTarget = String(currentTargets.dailyStepTarget)
     }
     
     private func saveTargets() {
-        var newTargets = dataManager.userTargets
+        var newTargets = currentTargets
         
         if let water = Double(waterTarget) {
             newTargets.dailyWaterTarget = water
@@ -140,14 +147,123 @@ struct SettingsView: View {
             showingTargetWarnings = true
         }
         
-        dataManager.updateUserTargets(newTargets)
+        try? modelContext.save()
+    }
+    
+    private func resetAllData() {
+        // Delete all food entries
+        let foodDescriptor = FetchDescriptor<FoodEntry>()
+        if let foodEntries = try? modelContext.fetch(foodDescriptor) {
+            for entry in foodEntries {
+                modelContext.delete(entry)
+            }
+        }
+        
+        // Delete all water entries
+        let waterDescriptor = FetchDescriptor<WaterEntry>()
+        if let waterEntries = try? modelContext.fetch(waterDescriptor) {
+            for entry in waterEntries {
+                modelContext.delete(entry)
+            }
+        }
+        
+        // Delete all step entries
+        let stepDescriptor = FetchDescriptor<StepEntry>()
+        if let stepEntries = try? modelContext.fetch(stepDescriptor) {
+            for entry in stepEntries {
+                modelContext.delete(entry)
+            }
+        }
+        
+        // Reset user targets
+        if let targets = try? modelContext.fetch(FetchDescriptor<UserTargets>()).first {
+            modelContext.delete(targets)
+        }
+        let defaultTargets = UserTargets()
+        modelContext.insert(defaultTargets)
+        
+        try? modelContext.save()
+    }
+    
+    private func generateTestData() {
+        // Delete existing data first
+        resetAllData()
+        
+        let calendar = Calendar.current
+        let today = Date()
+        
+        // Generate 7 days of test data
+        for dayOffset in 0..<7 {
+            let date = calendar.date(byAdding: .day, value: -dayOffset, to: today)!
+            
+            // Add water entries
+            let waterEntriesCount = Int.random(in: 3...8)
+            let targetWater = 2000.0
+            var remainingWater = targetWater * Double.random(in: 0.7...1.3)
+            
+            for i in 0..<waterEntriesCount {
+                var randomAmount: Double
+                if i == waterEntriesCount - 1 {
+                    randomAmount = remainingWater
+                } else {
+                    randomAmount = remainingWater * Double.random(in: 0.1...0.5)
+                }
+                remainingWater -= randomAmount
+                
+                let randomHour = Int.random(in: 8...22)
+                let randomMinute = Int.random(in: 0...59)
+                let timestamp = calendar.date(bySettingHour: randomHour, minute: randomMinute, second: 0, of: date)!
+                
+                let entry = WaterEntry(amount: max(50, randomAmount))
+                entry.timestamp = timestamp
+                modelContext.insert(entry)
+            }
+            
+            // Add food entries
+            let foodCategories = ["Breakfast", "Lunch", "Dinner", "Snack"]
+            let mealTimes = [
+                "Breakfast": 7...9,
+                "Lunch": 11...13,
+                "Dinner": 18...20,
+                "Snack": 10...21
+            ]
+            
+            for category in foodCategories {
+                if Double.random(in: 0...1) < 0.3 {
+                    continue
+                }
+                
+                let timeRange = mealTimes[category]!
+                let randomHour = Int.random(in: timeRange)
+                let randomMinute = Int.random(in: 0...59)
+                let timestamp = calendar.date(bySettingHour: randomHour, minute: randomMinute, second: 0, of: date)!
+                
+                let entry = FoodEntry(
+                    name: "Test \(category)",
+                    category: category,
+                    calories: Int.random(in: 200...800)
+                )
+                entry.timestamp = timestamp
+                modelContext.insert(entry)
+            }
+            
+            // Add step entry
+            let isWeekend = calendar.isDateInWeekend(date)
+            let baseSteps = isWeekend ? 2000 : 8000
+            let randomSteps = Int.random(in: 0...7000)
+            let steps = baseSteps + randomSteps
+            
+            let stepEntry = StepEntry(date: calendar.startOfDay(for: date), count: steps)
+            modelContext.insert(stepEntry)
+        }
+        
+        try? modelContext.save()
     }
 }
 
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
         SettingsView()
-            .environmentObject(DataManager())
             .environmentObject(NotificationManager.shared)
     }
 } 

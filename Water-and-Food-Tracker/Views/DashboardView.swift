@@ -1,11 +1,43 @@
 import SwiftUI
 import UIKit
+import SwiftData
 
 struct DashboardView: View {
-    @EnvironmentObject var dataManager: DataManager
+    @Environment(\.modelContext) private var modelContext
     @EnvironmentObject var healthKitManager: HealthKitManager
     @State private var isLoadingSteps = false
     @State private var stepError: String?
+    @State private var currentStepCount: Int = 0
+    
+    @Query private var foodEntries: [FoodEntry]
+    @Query private var waterEntries: [WaterEntry]
+    @Query private var userTargets: [UserTargets]
+    
+    private var currentTargets: UserTargets {
+        userTargets.first ?? UserTargets()
+    }
+    
+    private var dailyFoodEntries: [FoodEntry] {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let tomorrow = calendar.date(byAdding: .day, value: 1, to: today)!
+        return foodEntries.filter { $0.timestamp >= today && $0.timestamp < tomorrow }
+    }
+    
+    private var dailyWaterEntries: [WaterEntry] {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let tomorrow = calendar.date(byAdding: .day, value: 1, to: today)!
+        return waterEntries.filter { $0.timestamp >= today && $0.timestamp < tomorrow }
+    }
+    
+    private var totalWaterConsumption: Double {
+        dailyWaterEntries.reduce(0) { $0 + $1.amount }
+    }
+    
+    private var totalCalories: Int {
+        dailyFoodEntries.reduce(0) { $0 + $1.calories }
+    }
     
     var body: some View {
         NavigationView {
@@ -14,8 +46,8 @@ struct DashboardView: View {
                     // Water Progress
                     ProgressCard(
                         title: "Water Intake",
-                        current: dataManager.getTotalWaterConsumption(),
-                        target: dataManager.userTargets.dailyWaterTarget,
+                        current: totalWaterConsumption,
+                        target: currentTargets.dailyWaterTarget,
                         unit: "ml",
                         color: .blue
                     )
@@ -23,8 +55,8 @@ struct DashboardView: View {
                     // Calories Progress
                     ProgressCard(
                         title: "Calories",
-                        current: Double(dataManager.getTotalCalories()),
-                        target: Double(dataManager.userTargets.dailyCalorieTarget),
+                        current: Double(totalCalories),
+                        target: Double(currentTargets.dailyCalorieTarget),
                         unit: "kcal",
                         color: .orange
                     )
@@ -32,8 +64,8 @@ struct DashboardView: View {
                     // Steps Progress
                     ProgressCard(
                         title: "Steps",
-                        current: Double(dataManager.stepCount),
-                        target: Double(dataManager.userTargets.dailyStepTarget),
+                        current: Double(currentStepCount),
+                        target: Double(currentTargets.dailyStepTarget),
                         unit: "steps",
                         color: .green,
                         isLoading: isLoadingSteps,
@@ -130,7 +162,7 @@ struct DashboardView: View {
                 
                 await MainActor.run {
                     if let todaySteps = stepCounts[startDate] {
-                        dataManager.updateStepCount(todaySteps)
+                        updateStepCount(todaySteps)
                         stepError = nil
                     } else {
                         stepError = "No step data available for today"
@@ -146,11 +178,35 @@ struct DashboardView: View {
         }
     }
     
+    private func updateStepCount(_ count: Int) {
+        currentStepCount = count
+        
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let tomorrow = calendar.date(byAdding: .day, value: 1, to: today)!
+        
+        // Create or update step entry for today
+        let descriptor = FetchDescriptor<StepEntry>(
+            predicate: #Predicate<StepEntry> { entry in
+                entry.date >= today && entry.date < tomorrow
+            }
+        )
+        
+        if let existingEntry = try? modelContext.fetch(descriptor).first {
+            existingEntry.count = count
+        } else {
+            let newEntry = StepEntry(date: today, count: count)
+            modelContext.insert(newEntry)
+        }
+        
+        try? modelContext.save()
+    }
+    
     private func getRecentEntries() -> [RecentEntry] {
         var entries: [RecentEntry] = []
         
         // Add food entries
-        for entry in dataManager.getDailyFoodEntries() {
+        for entry in dailyFoodEntries {
             entries.append(RecentEntry(
                 id: entry.id,
                 type: .food,
@@ -161,7 +217,7 @@ struct DashboardView: View {
         }
         
         // Add water entries
-        for entry in dataManager.getDailyWaterEntries() {
+        for entry in dailyWaterEntries {
             entries.append(RecentEntry(
                 id: entry.id,
                 type: .water,
@@ -256,6 +312,5 @@ struct ProgressCard: View {
 
 #Preview {
     DashboardView()
-        .environmentObject(DataManager())
         .environmentObject(HealthKitManager())
 } 
