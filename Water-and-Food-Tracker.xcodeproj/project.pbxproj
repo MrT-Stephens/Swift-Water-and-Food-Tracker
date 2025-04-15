@@ -6,6 +6,22 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		44221CB32DAE900700904E25 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44BF13E42DAD6988006B6F59 /* WidgetKit.framework */; };
+		44221CB42DAE900700904E25 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44BF13E62DAD6988006B6F59 /* SwiftUI.framework */; };
+		44221CC52DAE900900904E25 /* Water-and-Fodd-Tracker-WidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 44221CB22DAE900700904E25 /* Water-and-Fodd-Tracker-WidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		44221CC32DAE900900904E25 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 44EACCE02DAD262200E95863 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 44221CB12DAE900700904E25;
+			remoteInfo = "Water-and-Fodd-Tracker-WidgetExtension";
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		44BF13F82DAD698A006B6F59 /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -13,6 +29,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				44221CC52DAE900900904E25 /* Water-and-Fodd-Tracker-WidgetExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -20,12 +37,31 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		44221CB22DAE900700904E25 /* Water-and-Fodd-Tracker-WidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Water-and-Fodd-Tracker-WidgetExtension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		44221CD82DAE93D600904E25 /* Water-and-Fodd-Tracker-WidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Water-and-Fodd-Tracker-WidgetExtension.entitlements"; sourceTree = "<group>"; };
 		44BF13E42DAD6988006B6F59 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		44BF13E62DAD6988006B6F59 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		44EACCE82DAD262200E95863 /* Water-and-Food-Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Water-and-Food-Tracker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		44221CC92DAE900900904E25 /* Exceptions for "Water-and-Fodd-Tracker-Widget" folder in "Water-and-Fodd-Tracker-WidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 44221CB12DAE900700904E25 /* Water-and-Fodd-Tracker-WidgetExtension */;
+		};
+		44221CD42DAE92DA00904E25 /* Exceptions for "Water-and-Food-Tracker" folder in "Water-and-Fodd-Tracker-WidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Models/FoodEntry.swift,
+				Models/StepEntry.swift,
+				Models/UserTargets.swift,
+				Models/WaterEntry.swift,
+			);
+			target = 44221CB12DAE900700904E25 /* Water-and-Fodd-Tracker-WidgetExtension */;
+		};
 		44BF13B12DAD67F9006B6F59 /* Exceptions for "Water-and-Food-Tracker" folder in "Water-and-Food-Tracker" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -36,10 +72,19 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		44221CB52DAE900700904E25 /* Water-and-Fodd-Tracker-Widget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				44221CC92DAE900900904E25 /* Exceptions for "Water-and-Fodd-Tracker-Widget" folder in "Water-and-Fodd-Tracker-WidgetExtension" target */,
+			);
+			path = "Water-and-Fodd-Tracker-Widget";
+			sourceTree = "<group>";
+		};
 		44EACCEA2DAD262200E95863 /* Water-and-Food-Tracker */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				44BF13B12DAD67F9006B6F59 /* Exceptions for "Water-and-Food-Tracker" folder in "Water-and-Food-Tracker" target */,
+				44221CD42DAE92DA00904E25 /* Exceptions for "Water-and-Food-Tracker" folder in "Water-and-Fodd-Tracker-WidgetExtension" target */,
 			);
 			path = "Water-and-Food-Tracker";
 			sourceTree = "<group>";
@@ -47,6 +92,15 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		44221CAF2DAE900700904E25 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				44221CB42DAE900700904E25 /* SwiftUI.framework in Frameworks */,
+				44221CB32DAE900700904E25 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		44EACCE52DAD262200E95863 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -69,7 +123,9 @@
 		44EACCDF2DAD262200E95863 = {
 			isa = PBXGroup;
 			children = (
+				44221CD82DAE93D600904E25 /* Water-and-Fodd-Tracker-WidgetExtension.entitlements */,
 				44EACCEA2DAD262200E95863 /* Water-and-Food-Tracker */,
+				44221CB52DAE900700904E25 /* Water-and-Fodd-Tracker-Widget */,
 				44BF13E32DAD6988006B6F59 /* Frameworks */,
 				44EACCE92DAD262200E95863 /* Products */,
 			);
@@ -79,6 +135,7 @@
 			isa = PBXGroup;
 			children = (
 				44EACCE82DAD262200E95863 /* Water-and-Food-Tracker.app */,
+				44221CB22DAE900700904E25 /* Water-and-Fodd-Tracker-WidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -86,6 +143,28 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		44221CB12DAE900700904E25 /* Water-and-Fodd-Tracker-WidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 44221CC62DAE900900904E25 /* Build configuration list for PBXNativeTarget "Water-and-Fodd-Tracker-WidgetExtension" */;
+			buildPhases = (
+				44221CAE2DAE900700904E25 /* Sources */,
+				44221CAF2DAE900700904E25 /* Frameworks */,
+				44221CB02DAE900700904E25 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				44221CB52DAE900700904E25 /* Water-and-Fodd-Tracker-Widget */,
+			);
+			name = "Water-and-Fodd-Tracker-WidgetExtension";
+			packageProductDependencies = (
+			);
+			productName = "Water-and-Fodd-Tracker-WidgetExtension";
+			productReference = 44221CB22DAE900700904E25 /* Water-and-Fodd-Tracker-WidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		44EACCE72DAD262200E95863 /* Water-and-Food-Tracker */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 44EACCF82DAD262400E95863 /* Build configuration list for PBXNativeTarget "Water-and-Food-Tracker" */;
@@ -98,6 +177,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				44221CC42DAE900900904E25 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				44EACCEA2DAD262200E95863 /* Water-and-Food-Tracker */,
@@ -119,6 +199,9 @@
 				LastSwiftUpdateCheck = 1620;
 				LastUpgradeCheck = 1620;
 				TargetAttributes = {
+					44221CB12DAE900700904E25 = {
+						CreatedOnToolsVersion = 16.2;
+					};
 					44EACCE72DAD262200E95863 = {
 						CreatedOnToolsVersion = 16.2;
 					};
@@ -139,11 +222,19 @@
 			projectRoot = "";
 			targets = (
 				44EACCE72DAD262200E95863 /* Water-and-Food-Tracker */,
+				44221CB12DAE900700904E25 /* Water-and-Fodd-Tracker-WidgetExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		44221CB02DAE900700904E25 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		44EACCE62DAD262200E95863 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -154,6 +245,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		44221CAE2DAE900700904E25 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		44EACCE42DAD262200E95863 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -163,7 +261,71 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		44221CC42DAE900900904E25 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 44221CB12DAE900700904E25 /* Water-and-Fodd-Tracker-WidgetExtension */;
+			targetProxy = 44221CC32DAE900900904E25 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		44221CC72DAE900900904E25 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = "Water-and-Fodd-Tracker-WidgetExtension.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Water-and-Fodd-Tracker-Widget/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Water-and-Fodd-Tracker-Widget";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.mrt-stephens.Water-and-Food-Tracker.Water-and-Fodd-Tracker-Widget";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		44221CC82DAE900900904E25 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = "Water-and-Fodd-Tracker-WidgetExtension.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Water-and-Fodd-Tracker-Widget/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Water-and-Fodd-Tracker-Widget";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.mrt-stephens.Water-and-Food-Tracker.Water-and-Fodd-Tracker-Widget";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		44EACCF62DAD262400E95863 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -348,6 +510,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		44221CC62DAE900900904E25 /* Build configuration list for PBXNativeTarget "Water-and-Fodd-Tracker-WidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				44221CC72DAE900900904E25 /* Debug */,
+				44221CC82DAE900900904E25 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		44EACCE32DAD262200E95863 /* Build configuration list for PBXProject "Water-and-Food-Tracker" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

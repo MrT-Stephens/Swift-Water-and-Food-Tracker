@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import WidgetKit
 
 struct SettingsView: View {
     @Environment(\.modelContext) private var modelContext
@@ -147,7 +148,19 @@ struct SettingsView: View {
             showingTargetWarnings = true
         }
         
+        // Update the existing targets in the database
+        if let existingTargets = userTargets.first {
+            existingTargets.dailyWaterTarget = newTargets.dailyWaterTarget
+            existingTargets.dailyCalorieTarget = newTargets.dailyCalorieTarget
+            existingTargets.dailyStepTarget = newTargets.dailyStepTarget
+        } else {
+            // If no targets exist, create new ones
+            modelContext.insert(newTargets)
+        }
+        
         try? modelContext.save()
+        
+        WidgetCenter.shared.reloadAllTimelines()
     }
     
     private func resetAllData() {
@@ -258,6 +271,8 @@ struct SettingsView: View {
         }
         
         try? modelContext.save()
+        
+        WidgetCenter.shared.reloadAllTimelines()
     }
 }
 

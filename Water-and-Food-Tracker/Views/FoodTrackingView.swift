@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import WidgetKit
 
 struct FoodTrackingView: View {
     @Environment(\.modelContext) private var modelContext
@@ -101,6 +102,8 @@ struct FoodTrackingView: View {
         calories = ""
         notes = ""
         showingAddFood = false
+        
+        WidgetCenter.shared.reloadAllTimelines()
     }
 }
 

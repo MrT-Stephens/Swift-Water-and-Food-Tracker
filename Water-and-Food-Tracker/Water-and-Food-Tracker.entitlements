@@ -10,7 +10,7 @@
 	</array>
 	<key>com.apple.security.application-groups</key>
 	<array>
-		<string>group.com.thomasstephens.waterandfoodtracker</string>
+		<string>group.mrt-stephens.water-and-food-tracker</string>
 	</array>
 </dict>
 </plist>

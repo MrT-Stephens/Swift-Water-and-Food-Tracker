@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import WidgetKit
 
 struct WaterTrackingView: View {
     @Environment(\.modelContext) private var modelContext
@@ -130,6 +131,7 @@ struct WaterTrackingView: View {
         try? modelContext.save()
         self.amount = ""
         showingAddWater = false
+        WidgetCenter.shared.reloadAllTimelines()
     }
 }
 

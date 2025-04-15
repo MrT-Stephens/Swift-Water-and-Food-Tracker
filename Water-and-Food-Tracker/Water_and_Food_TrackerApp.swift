@@ -25,7 +25,11 @@ struct Water_and_Food_TrackerApp: App {
                 UserTargets.self,
                 StepEntry.self
             ])
-            let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
+            
+            let containerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.mrt-stephens.water-and-food-tracker")!
+            
+            let modelConfiguration = ModelConfiguration(schema: schema, url: containerURL.appendingPathComponent("Water-and-Food-Tracker.db"))
+            
             container = try ModelContainer(for: schema, configurations: [modelConfiguration])
         } catch {
             fatalError("Could not configure SwiftData container: \(error)")

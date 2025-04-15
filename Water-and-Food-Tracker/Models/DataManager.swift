@@ -1,5 +1,6 @@
 import Foundation
 import SwiftData
+import WidgetKit
 
 // MARK: - Data Manager
 @Observable
@@ -10,22 +11,6 @@ class DataManager {
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
         loadData()
-    }
-    
-    // MARK: - Data Access Methods
-    
-    func addFoodEntry(_ entry: FoodEntry) {
-        modelContext.insert(entry)
-        try? modelContext.save()
-    }
-    
-    func addWaterEntry(_ entry: WaterEntry) {
-        modelContext.insert(entry)
-        try? modelContext.save()
-    }
-    
-    func updateUserTargets(_ targets: UserTargets) {
-        try? modelContext.save()
     }
     
     func updateStepCount(_ count: Int) {
@@ -50,6 +35,7 @@ class DataManager {
         }
         
         try? modelContext.save()
+        WidgetCenter.shared.reloadAllTimelines()
     }
     
     func getDailyFoodEntries() -> [FoodEntry] {
@@ -98,6 +84,7 @@ class DataManager {
             let defaultTargets = UserTargets()
             modelContext.insert(defaultTargets)
             try? modelContext.save()
+            WidgetCenter.shared.reloadAllTimelines()
         }
     }
 } 

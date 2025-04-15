@@ -14,37 +14,57 @@ struct ContentView: View {
     @StateObject private var healthKitManager = HealthKitManager.shared
     @State private var selectedTab = 0
     
+    private let tabs = [
+        (title: "Dashboard", icon: "chart.bar.fill", view: AnyView(DashboardView())),
+        (title: "Food", icon: "fork.knife", view: AnyView(FoodTrackingView())),
+        (title: "Water", icon: "drop.fill", view: AnyView(WaterTrackingView())),
+        (title: "History", icon: "clock.fill", view: AnyView(HistoryView())),
+        (title: "AI Meals", icon: "brain.head.profile", view: AnyView(AIMealSuggestionsView())),
+        (title: "Settings", icon: "gear", view: AnyView(SettingsView()))
+    ]
+    
     var body: some View {
-        TabView(selection: $selectedTab) {
-            DashboardView()
-                .tabItem {
-                    Label("Dashboard", systemImage: "chart.bar.fill")
+        ZStack(alignment: .bottom) {
+            // Content View
+            ZStack {
+                ForEach(0..<tabs.count, id: \.self) { index in
+                    tabs[index].view
+                        .opacity(selectedTab == index ? 1 : 0)
+                        .animation(.easeInOut, value: selectedTab)
                 }
-                .tag(0)
+            }
             
-            FoodTrackingView()
-                .tabItem {
-                    Label("Food", systemImage: "fork.knife")
+            // Custom Tab Bar
+            VStack(spacing: 0) {
+                Divider()
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 0) {
+                        ForEach(0..<tabs.count, id: \.self) { index in
+                            Button(action: {
+                                withAnimation {
+                                    selectedTab = index
+                                }
+                            }) {
+                                VStack(spacing: 4) {
+                                    Image(systemName: tabs[index].icon)
+                                        .font(.system(size: 22))
+                                    Text(tabs[index].title)
+                                        .font(.caption)
+                                }
+                                .frame(width: 80)
+                                .padding(.vertical, 8)
+                                .background(selectedTab == index ? Color.blue.opacity(0.1) : Color.clear)
+                                .foregroundColor(selectedTab == index ? .blue : .gray)
+                                .cornerRadius(8)
+                            }
+                        }
+                    }
+                    .padding(.horizontal, 8)
                 }
-                .tag(1)
-            
-            WaterTrackingView()
-                .tabItem {
-                    Label("Water", systemImage: "drop.fill")
-                }
-                .tag(2)
-            
-            HistoryView()
-                .tabItem {
-                    Label("History", systemImage: "clock.fill")
-                }
-                .tag(3)
-            
-            SettingsView()
-                .tabItem {
-                    Label("Settings", systemImage: "gear")
-                }
-                .tag(4)
+                .background(Color(.systemBackground))
+            }
+            .background(Color(.systemBackground))
+            .shadow(color: Color.black.opacity(0.05), radius: 2, y: -1)
         }
         .environmentObject(healthKitManager)
     }
