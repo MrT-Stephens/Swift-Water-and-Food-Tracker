@@ -81,6 +81,12 @@ struct SettingsView: View {
                         if notificationManager.isFoodReminderEnabled {
                             DatePicker("Food Reminder Time", selection: $notificationManager.foodReminderTime, displayedComponents: .hourAndMinute)
                         }
+                        
+                        Toggle("Daily Progress Updates", isOn: $notificationManager.isProgressNotificationEnabled)
+                        
+                        if notificationManager.isProgressNotificationEnabled {
+                            DatePicker("Progress Update Time", selection: $notificationManager.progressNotificationTime, displayedComponents: .hourAndMinute)
+                        }
                     }
                 }
                 

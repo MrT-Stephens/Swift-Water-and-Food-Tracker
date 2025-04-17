@@ -43,6 +43,7 @@ struct Water_and_Food_TrackerApp: App {
                 .environmentObject(notificationManager)
                 .onAppear {
                     notificationManager.requestAuthorization()
+                    notificationManager.setModelContext(container.mainContext)
                 }
         }
         .modelContainer(container)

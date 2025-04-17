@@ -18,7 +18,7 @@ struct AIMealSuggestionsView: View {
     @State private var dietaryPreferences: [String] = []
     @State private var targetCalories: Int?
     
-    private let aiService = AIMealService(apiKey: "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") // Replace with actual API key
+    private let aiService = AIMealService(apiKey: "") // Replace with actual API key
     
     enum MealType: String, CaseIterable {
         case breakfast = "Breakfast"

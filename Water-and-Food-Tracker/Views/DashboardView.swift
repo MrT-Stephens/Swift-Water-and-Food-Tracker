@@ -5,9 +5,13 @@ import SwiftData
 struct DashboardView: View {
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject var healthKitManager: HealthKitManager
+    @EnvironmentObject var notificationManager: NotificationManager
     @State private var isLoadingSteps = false
     @State private var stepError: String?
     @State private var currentStepCount: Int = 0
+    @State private var lastWaterProgress: Double = 0
+    @State private var lastCaloriesProgress: Double = 0
+    @State private var lastStepsProgress: Double = 0
     
     @Query private var foodEntries: [FoodEntry]
     @Query private var waterEntries: [WaterEntry]
@@ -200,6 +204,55 @@ struct DashboardView: View {
         }
         
         try? modelContext.save()
+        
+        // Check for progress milestones
+        let currentProgress = Double(count) / Double(currentTargets.dailyStepTarget)
+        if currentProgress >= 0.25 && lastStepsProgress < 0.25 {
+            notificationManager.sendProgressNotification(modelContext: modelContext)
+        } else if currentProgress >= 0.5 && lastStepsProgress < 0.5 {
+            notificationManager.sendProgressNotification(modelContext: modelContext)
+        } else if currentProgress >= 0.75 && lastStepsProgress < 0.75 {
+            notificationManager.sendProgressNotification(modelContext: modelContext)
+        }
+        lastStepsProgress = currentProgress
+    }
+    
+    private func addWaterEntry(amount: Double) {
+        let entry = WaterEntry(amount: amount)
+        modelContext.insert(entry)
+        try? modelContext.save()
+        
+        // Check for progress milestones
+        let currentProgress = (totalWaterConsumption + amount) / currentTargets.dailyWaterTarget
+        if currentProgress >= 0.25 && lastWaterProgress < 0.25 {
+            notificationManager.sendProgressNotification(modelContext: modelContext)
+        } else if currentProgress >= 0.5 && lastWaterProgress < 0.5 {
+            notificationManager.sendProgressNotification(modelContext: modelContext)
+        } else if currentProgress >= 0.75 && lastWaterProgress < 0.75 {
+            notificationManager.sendProgressNotification(modelContext: modelContext)
+        }
+        lastWaterProgress = currentProgress
+    }
+    
+    private func addFoodEntry(calories: Int) {
+        let entry = FoodEntry(
+            name: "Food Entry",
+            category: "Meal",
+            calories: calories
+        )
+        modelContext.insert(entry)
+        try? modelContext.save()
+        
+        // Check for progress milestones
+        let currentProgress = Double(totalCalories + calories) / Double(currentTargets.dailyCalorieTarget)
+        if currentProgress >= 0.25 && lastCaloriesProgress < 0.25 {
+            notificationManager.sendProgressNotification(modelContext: modelContext)
+        } else if currentProgress >= 0.5 && lastCaloriesProgress < 0.5 {
+            notificationManager.sendProgressNotification(modelContext: modelContext)
+        } else if currentProgress >= 0.75 && lastCaloriesProgress < 0.75 {
+            notificationManager.sendProgressNotification(modelContext: modelContext)
+        }
+        lastCaloriesProgress = currentProgress
     }
     
     private func getRecentEntries() -> [RecentEntry] {
