@@ -2,7 +2,15 @@
 
 A comprehensive iOS application for tracking daily water intake, food consumption, and step count. The app helps users maintain a healthy lifestyle by monitoring their daily habits and providing insights into their progress.
 
-![App Screenshot](Screenshots/app-screenshot.png)
+<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; justify-content: center; align-items: center; width: max-content; margin: 0 auto;">
+<img width="140" alt="image" src="https://github.com/user-attachments/assets/9f64d1b0-fb9f-4cb7-8e5c-402c72797f65" />
+<img width="140" alt="image" src="https://github.com/user-attachments/assets/0de62bb6-1a65-4b59-beef-c738f329776e" />
+<img width="140" alt="image" src="https://github.com/user-attachments/assets/ea8e2c3f-94b4-403a-a52c-f908e0a63aba" />
+<img width="140" alt="image" src="https://github.com/user-attachments/assets/f7eabe61-1ece-4ccc-bc13-fcf4af733482" />
+<img width="140" alt="image" src="https://github.com/user-attachments/assets/d9e49bc1-1400-4365-8d51-21e220c151a1" />
+<img width="140" alt="image" src="https://github.com/user-attachments/assets/e0532822-81e4-4840-b67d-2d950012879d" />
+</div>
+
 
 ## Features
 
@@ -103,9 +111,3 @@ The shared data includes:
 - Social features for sharing progress and challenges
 - Advanced analytics and trend analysis
 - Integration with additional health and fitness platforms
-
-## Acknowledgments
-
-- Icons provided by SF Symbols
-- HealthKit integration for step tracking
-- SwiftData for reliable data persistence 
