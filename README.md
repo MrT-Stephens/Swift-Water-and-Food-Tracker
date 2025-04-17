@@ -11,28 +11,33 @@ A comprehensive iOS application for tracking daily water intake, food consumptio
 - Set daily water intake goals
 - View water consumption history
 - Track progress with visual indicators
+- Smart notifications for hydration reminders
 
 ### Food Tracking
 - Log meals and snacks with calorie information
 - Categorize food entries (Breakfast, Lunch, Dinner, Snack)
 - Set daily calorie goals
 - View food consumption history
+- AI-powered meal suggestions based on preferences and goals
 
 ### Step Tracking
-- Track daily step count
+- Automatic step tracking through HealthKit integration
 - Set daily step goals
 - View step history
+- Real-time step count updates
 
 ### Widgets
 - Add widgets to your home screen to quickly view your daily progress
 - Available in small and medium sizes
-- Shows water intake and food consumption at a glance
+- Shows water intake, food consumption, and step count at a glance
 - Updates automatically every 30 minutes
 
-### Data Management
-- Persistent storage of all entries
-- Data sharing between app and widgets
-- Option to reset data or initialize with sample data
+### Smart Features
+- AI-powered meal suggestions
+- Customizable smart notifications
+- Progress tracking and analytics
+- Data persistence with SwiftData
+- Seamless HealthKit integration
 
 ## Requirements
 
@@ -69,7 +74,8 @@ A comprehensive iOS application for tracking daily water intake, food consumptio
   - **Models/**
     - `Models.swift` - Data models and DataManager
     - `HealthKitManager.swift` - HealthKit integration
-    - `NotificationManager.swift` - Local notifications
+    - `NotificationManager.swift` - Smart notification system
+    - `AIManager.swift` - AI-powered meal suggestions
   - **Views/**
     - Various SwiftUI views for the app interface
   - **Assets.xcassets/**
@@ -77,20 +83,29 @@ A comprehensive iOS application for tracking daily water intake, food consumptio
   - **Info.plist**
     - App configuration
 
-- **Water-Widget/**
+- **Water-and-Food-Tracker-Widget/**
   - Widget extension for displaying water and food intake on the home screen
   - `SharedDataManager.swift` - Shared data access between app and widget
 
-## Data Sharing Between App and Widget
+## Data Management
 
-The app uses App Groups to share data between the main application and the widget extension. This allows the widget to display the same data that's shown in the app.
+The app uses SwiftData for reliable data persistence and App Groups for sharing data between the main application and the widget extension. This ensures consistent data across all components of the app.
 
 The shared data includes:
 - Water intake entries
 - Food intake entries
 - User targets
+- AI preferences and suggestions
+
+## Future Enhancements
+
+- Enhanced AI features for more personalized meal suggestions
+- Social features for sharing progress and challenges
+- Advanced analytics and trend analysis
+- Integration with additional health and fitness platforms
 
 ## Acknowledgments
 
 - Icons provided by SF Symbols
-- Sample data generation for testing purposes 
+- HealthKit integration for step tracking
+- SwiftData for reliable data persistence 
